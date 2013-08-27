@@ -5,6 +5,8 @@ The goal of this service is to integrate closely with the addons.mozilla.org
 website (a.k.a AMO) to provide a way to register non AMO-listed addons as
 a really simple process.
 
+`The initial brainstorm is there <https://wiki.mozilla.org/User:Jorge.villalobos/WorkWeek2012Q2/FileRegistration>`_
+
 Goals
 =====
 

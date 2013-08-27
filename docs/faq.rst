@@ -18,3 +18,5 @@ easily in our database.
 **Do we want to do the search on the addonid only? What does the spec say atm:
 is the tuple (name + addonid) unique?** In other words, is it possible to do
 the check only on the addonid, without considering the name at all?
+
+→ We don't need the name at all *at searching time*
