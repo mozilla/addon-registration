@@ -11,6 +11,6 @@ clean:
 	rm -rf bin lib local include man
 
 doc:
-	bin/pip install mozilla-sphinx-theme sphinx
+	bin/pip -r docs/requirements.txt
 	cd docs && make html
 
