@@ -22,14 +22,19 @@ Behind the scenes
 =================
 
 When an user wants to install a new addon, the user-agent (firefox) will have
-a look at the hash of the .xpi file it is trying to install and send a request
+a look at the hash of the ``.xpi`` file it is trying to install and send a request
 to our server, which will do a verification on this hash, to be sure it matches
-something known.
+something known to us.
+
+It acts as a whitelist: all the known addons will be installed without any
+warning and the other ones will be either not installed or a warning will be
+issued.
 
 What's an addon anyway?
 -----------------------
 
-An addon contains different important piece of information:
+An addon contains different important piece of metadata. The ones which are
+interesting to us are the following:
 
 - an unique addon id
 - a name
@@ -39,9 +44,9 @@ An addon contains different important piece of information:
 How do we proceed?
 ------------------
 
-Each time someone wants to release a new addon, it needs to register the new
-version on AMO. This process can be automated really easily using the HTTP APIs
-this service is providing.
+Each time someone wants to release a new addon, it needs to register it on AMO.
+This also applies to new versions of already existing addons. This process can
+be automated really easily using the HTTP APIs this service is providing.
 
 The information sent to the AMO registration service are the following:
 
@@ -54,24 +59,6 @@ The information sent to the AMO registration service are the following:
 These information are sent to our services. In case there is a match, all is
 fine and we don't display anything. In case nothing is found in the db,
 a warning is shown to the user.
-
-What does this mean?
-====================
-
-For the addon developpers
--------------------------
-
-All of this means addons developers will need to register their addons on
-addons.mozilla.org. 
-
-On the user agent
------------------
-
-On the user-agent side, we need to do the following changes:
-
-- Be sure it's possible to stop asking the server if the file is well known or
-  not for certain addons.
-
 
 More doc
 ========
