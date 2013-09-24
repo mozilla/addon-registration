@@ -11,7 +11,7 @@ with open(os.path.join(here, 'CHANGES.rst')) as f:
     CHANGES = f.read()
 
 
-requires = []
+requires = ['cornice', 'pyramid']
 
 
 setup(name='addonreg',
@@ -28,4 +28,5 @@ setup(name='addonreg',
       author_email='services-dev@mozilla.org',
       url='https://github.com/mozilla-services/addonreg',
       tests_require=['nose', 'mock', 'unittest2'],
-      test_suite='nose.collector')
+      test_suite='nose.collector',
+      entry_points={'paste.app_factory': ['main = addonreg:main']})
