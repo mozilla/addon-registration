@@ -4,7 +4,7 @@ build:
 	bin/python setup.py develop
 
 test:
-	bin/nosetests --with-coverage --cover-erase --cover-package addonreg addonreg 
+	flake8 addonreg && bin/nosetests --with-coverage --cover-erase --cover-package addonreg addonreg
 
 clean:
 	rm -rf bin lib local include man
