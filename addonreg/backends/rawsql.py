@@ -5,4 +5,7 @@ class RawSQLBackend(object):
         self.config = config
 
     def hash_exists(self, addon_id, hash_):
-        return True   # XXX This is for the tests.
+        pass
+
+    def register_hash(self, addon_id, hash_):
+        pass
