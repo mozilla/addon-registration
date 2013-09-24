@@ -9,7 +9,7 @@ def get_addon(request):
     addon_id = request.matchdict['addonid']
     hash_ = request.matchdict['hash']
 
-    response = {'addonid': addon_id, 'sha256': hash_}
+    response = {'id': addon_id, 'sha256': hash_}
 
     registered = request.backend.hash_exists(addon_id, hash_)
     response['registered'] = registered
