@@ -66,4 +66,5 @@ More doc
 .. toctree::
    :maxdepth: 2
 
+   design
    faq
