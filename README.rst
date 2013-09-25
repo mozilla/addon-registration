@@ -5,8 +5,8 @@ Addon registration
    :alt: Build Status
    :target: https://secure.travis-ci.org/mozilla/addon-registration
 
-.. image:: https://coveralls.io/repos/mozilla/addon-registration/badge.png?branch=master
-   :target: https://coveralls.io/r/mozilla/addon-registration
+.. image:: https://coveralls.io/repos/mozilla/addon-registration/badge.png
+   :target: https://coveralls.io/r/mozilla/addon-registration 
 
 (Still in development, don't rely on it just yet.)
 
