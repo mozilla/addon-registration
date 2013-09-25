@@ -13,3 +13,6 @@ doc:
 	bin/pip install -r docs/requirements.txt
 	cd docs && make html
 
+serve:
+	bin/pserve development.ini
+

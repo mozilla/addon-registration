@@ -15,3 +15,13 @@ website (a.k.a AMO) to provide a way to register non AMO-listed addons as
 a really simple process.
 
 Have a look at http://addonreg.rtfd.org for more documentation on this service
+
+How to get started?
+===================
+
+To get started, you would just need to run the makefile a few times::
+
+    $ make build
+    $ make serve
+
+And you should have the server up & running!
