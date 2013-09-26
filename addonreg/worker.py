@@ -13,8 +13,13 @@ def bootstrap_pyramid(signal, sender):
     sender.app.settings = bootstrap(config)['registry'].settings
 
 
-celery = Celery()
-celery.config_from_object('celeryconfig')
+celery = Celery('addonreg.worker')
+
+# These should come from the normal .ini file.
+# Use Konfig here.
+celery.conf.update(
+    BROKER_URL="redis://localhost:6379/0",
+    CELERY_IMPORTS=['addonreg.tasks'])
 
 if __name__ == '__main__':
     celery.start()

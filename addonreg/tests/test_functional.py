@@ -39,3 +39,10 @@ class FunctionalTest(TestCase):
         self.assertDictEqual(resp.json, {'registered': False,
                                          'sha256': hash_,
                                          'id': addon_id})
+
+    def test_new_hash_submission(self):
+        addon_id = 'id@example.com'
+        hash_ = '0c27ec47b62e20a20a563aaada9dfa663d76a76f'
+
+        data = {'id': addon_id, 'sha256': hash_}
+        self.app.post_json('/hash', data, status=202)
