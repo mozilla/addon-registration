@@ -16,3 +16,5 @@ doc:
 serve:
 	bin/pserve development.ini
 
+workers:
+	CONFIG=development.ini bin/python addonreg/worker.py worker

@@ -19,9 +19,24 @@ Have a look at http://addonreg.rtfd.org for more documentation on this service
 How to get started?
 ===================
 
-To get started, you would just need to run the makefile a few times::
+Behind the scene, we are using `Celery <http://celeryproject.org>`_ to
+distribute our jobs in a queue. We use `Redis <http://redis.io>`_ as a backend
+so you would need to get it installed on your machine.
+
+Once you have the redis dependency in place, you would just need to run the
+makefile::
 
     $ make build
+    
+Then there are two parts. The fist one runs the web service, and the other one
+the celery workers.
+
+To start the service::
+
     $ make serve
+
+To start the celery workers::
+
+    $ make workers
 
 And you should have the server up & running!
