@@ -4,8 +4,7 @@ from pyramid.config import Configurator
 from pyramid.events import NewRequest
 
 
-def main(global_config, **settings):
-
+def get_configuration(settings):
     config = Configurator(settings=settings)
     backend_class = config.maybe_dotted(settings['addonreg.backend'])
     backend = backend_class(config)
@@ -16,8 +15,13 @@ def main(global_config, **settings):
     # Attach the backend to each request and put it in the registry.
     config.add_subscriber(_add_backend_to_request, NewRequest)
     config.registry.backend = backend
+    return config
 
-    config.include("cornice")
-    config.scan("addonreg.views")
+
+def main(global_config, **settings):
+    config = get_configuration(settings)
+
+    config.include('cornice')
+    config.scan('addonreg.views')
 
     return config.make_wsgi_app()

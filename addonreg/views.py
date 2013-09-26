@@ -1,16 +1,22 @@
 from cornice import Service
+from colander import MappingSchema, SchemaNode, String
 
-addon = Service(name='addon', path='/addon/{addonid}/{hash}')
+addon = Service(name='addon', path='/addon')
+addon_hash = Service(name='hash', path='/hash')
 
 
-@addon.get()
+class AddonSchema(MappingSchema):
+    id = SchemaNode(String(), location='body', type='str')
+    sha256 = SchemaNode(String(), location='body', type='str')
+
+
+@addon.post(schema=AddonSchema)
 def get_addon(request):
     """Checks that an addon with the given addon-id and hash exists."""
-    addon_id = request.matchdict['addonid']
-    hash_ = request.matchdict['hash']
+    addon_id = request.validated['id']
+    sha256 = request.validated['sha256']
+    response = {'id': addon_id, 'sha256': sha256}
 
-    response = {'id': addon_id, 'sha256': hash_}
-
-    registered = request.backend.hash_exists(addon_id, hash_)
+    registered = request.backend.hash_exists(addon_id, sha256)
     response['registered'] = registered
     return response
