@@ -11,4 +11,5 @@ wsgiref==0.1.2
 zope.deprecation==4.0.2
 zope.interface==4.0.5
 celery==3.0.23
-redis==2.8.1
+redis==2.8.0
+colander==0.9.9
