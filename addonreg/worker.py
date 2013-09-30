@@ -10,7 +10,7 @@ def bootstrap_pyramid(signal, sender):
     # We need this so that tasks are able to access what's defined in the
     # pyramid configuration.
     config = os.environ['CONFIG']
-    sender.app.settings = bootstrap(config)['registry'].settings
+    sender.app.registry = bootstrap(config)['registry']
 
 
 celery = Celery('addonreg.worker')
