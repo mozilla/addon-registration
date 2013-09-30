@@ -13,3 +13,4 @@ zope.interface==4.0.5
 celery==3.0.23
 redis==2.8.0
 colander==0.9.9
+konfig==0.8
