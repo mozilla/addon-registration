@@ -1,7 +1,6 @@
 import os
 
 from celery import Celery
-from celery.app import app_or_default
 from celery.signals import worker_process_init
 from pyramid.paster import bootstrap
 
@@ -13,18 +12,20 @@ def bootstrap_pyramid(signal, sender):
     # We need this so that tasks are able to access what's defined in the
     # pyramid configuration.
     config = os.environ['CONFIG']
-    app = app_or_default()
-    app.registry = bootstrap(config)['registry']
+    bootstrap(config)
 
 
 celery = Celery('addonreg.worker')
 
 # These should come from the normal .ini file.
 # Use Konfig here.
-config = get_config()
+conf = get_config()
+section = conf.get_map('celery')
 celery.conf.update(
-    BROKER_URL=config.get('app:main', 'celery.broker'),
-    CELERY_IMPORTS=['addonreg.tasks'])
+    BROKER_URL=section.get('broker'),
+    CELERY_IMPORTS=['addonreg.tasks'],
+    CELERY_ALWAYS_EAGER=section.get('always_eager', False))
+
 
 if __name__ == '__main__':
     celery.start()

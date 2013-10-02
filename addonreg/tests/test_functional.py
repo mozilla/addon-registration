@@ -46,3 +46,4 @@ class FunctionalTest(TestCase):
 
         data = {'id': addon_id, 'sha256': hash_}
         self.app.post_json('/hash', data, status=202)
+        self.assertTrue(self.backend.hash_exists(addon_id, hash_))
