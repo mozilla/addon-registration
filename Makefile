@@ -4,7 +4,7 @@ build:
 	bin/python setup.py develop
 
 test:
-	bin/flake8 addonreg && SQLURI=mysql://root:velorution@localhost/addonreg bin/nosetests --with-coverage --cover-erase --cover-package addonreg addonreg
+	bin/flake8 addonreg && SQLURI=mysql://addonreg:addonreg@localhost/addonreg bin/nosetests --with-coverage --cover-erase --cover-package addonreg addonreg
 
 clean:
 	rm -rf bin lib local include man
