@@ -14,9 +14,11 @@ class TestSQLBackend(TestCase):
     def setUp(self):
         super(TestSQLBackend, self).setUp()
         self.backend = RawSQLBackend(sqluri=self._SQLURI, create_tables=True)
-        self.guid = u'{9c51bd27-6ed8-4000-a2bf-36cb95c0c947}'
-        self.sha256 = (u'31f7a65e315586ac198bd798b6629ce4903d0899476d5741a9f32'
-                       'e2e521b6a66')
+        self.guids = (u'{9c51bd27-6ed8-4000-a2bf-36cb95c0c947}',
+                      u'id@example.com')
+        self.hashes = (u'31f7a65e315586ac198bd798b6629ce4903d0899476d5741a9f32'
+                       'e2e521b6a66', u'15586ac198bd798b6629ce4903d0899476d57',
+                       '41a9f3231f7a65e31')
         self._sqlite = self.backend._engine.driver == 'pysqlite'
 
     def tearDown(self):
@@ -31,10 +33,26 @@ class TestSQLBackend(TestCase):
         # Let's create a hash to test if we're able to read it back.
         self.backend._safe_execute(
             """INSERT INTO hashes (addonid, sha256, registered)
-               VALUES ("%s", "%s", 1)""" % (self.guid, self.sha256))
+               VALUES ("%s", "%s", 1)""" % (self.guids[0], self.hashes[0]))
 
-        self.assertTrue(self.backend.hash_exists(self.guid, self.sha256))
+        self.assertTrue(self.backend.hash_exists(self.guids[0],
+                                                 self.hashes[0]))
+        self.assertFalse(self.backend.hash_exists(self.guids[1],
+                                                  self.hashes[1]))
 
     def test_write(self):
-        self.backend.register_hash(self.guid, self.sha256)
-        self.assertTrue(self.backend.hash_exists(self.guid, self.sha256))
+        self.backend.register_hash(self.guids[0], self.hashes[0])
+        self.assertTrue(self.backend.hash_exists(self.guids[0],
+                        self.hashes[0]))
+
+    def test_hashes_exists(self):
+        for guid, sha in zip(self.guids, self.hashes):
+            self.backend._safe_execute(
+                """INSERT INTO hashes (addonid, sha256, registered)
+                   VALUES ("%s", "%s", 1)""" % (guid, sha))
+
+        resp = self.backend.hashes_exists(zip(self.guids, self.hashes))
+
+        self.assertEquals(len(resp), 2)
+        self.assertIn((self.guids[0], self.hashes[0]), resp)
+        self.assertIn((self.guids[1], self.hashes[1]), resp)

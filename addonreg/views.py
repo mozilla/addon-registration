@@ -1,16 +1,43 @@
 from cornice import Service
-from colander import MappingSchema, SchemaNode, String
+from colander import MappingSchema, SchemaNode, String, SequenceSchema
 from pyramid.httpexceptions import HTTPAccepted
 
 from addonreg.tasks import record_new_hash
 
 addon = Service(name='addon', path='/addon')
 addon_hash = Service(name='hash', path='/hash')
+addons = Service(name='hashes', path='/addons')
 
 
 class AddonSchema(MappingSchema):
     id = SchemaNode(String(), location='body', type='str')
     sha256 = SchemaNode(String(), location='body', type='str')
+
+
+class Addon(MappingSchema):
+    id = SchemaNode(String(), type='str')
+    sha256 = SchemaNode(String(), type='str')
+
+
+class Addons(SequenceSchema):
+    addons = Addon()
+
+
+class AddonsSchema(MappingSchema):
+    addons = Addons(location='body')
+
+
+@addons.post(schema=AddonsSchema)
+def get_addons(request):
+    addons = [(addon['id'], addon['sha256'])
+              for addon in request.validated['addons']]
+
+    # returns a list of registered (id, hash)
+    registered = request.backend.hashes_exists(addons)
+    addons = [{'id': idx, 'sha256': sha256,
+               'registered': (idx, sha256) in registered}
+              for (idx, sha256) in addons]
+    return {'addons': addons}
 
 
 @addon.post(schema=AddonSchema)

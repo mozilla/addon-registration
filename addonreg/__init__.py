@@ -20,7 +20,7 @@ def get_config(filename=None):
 def setup_configuration(settings):
     config = Configurator(settings=settings)
     backend_class = config.maybe_dotted(settings['addonreg.backend'])
-    backend = backend_class(config)
+    backend = backend_class(settings)
 
     def _add_backend_to_request(event):
         event.request.backend = backend

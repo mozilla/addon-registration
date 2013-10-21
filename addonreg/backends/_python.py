@@ -14,6 +14,10 @@ class PythonBackend(object):
     def hash_exists(self, addon_id, hash_):
         return hash_ in self._hashs[addon_id]
 
+    def hashes_exists(self, addons):
+        """Returns a list of registered hashes"""
+        return [info for info in addons if self.hash_exists(*info)]
+
     def register_hash(self, addon_id, hash_):
         if hash_ not in self._hashs[addon_id]:
             self._hashs[addon_id].append(hash_)

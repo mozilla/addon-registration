@@ -4,7 +4,7 @@ from sqlalchemy import String, Index, Boolean
 from sqlalchemy import Table, MetaData, create_engine, Column
 from sqlalchemy.exc import OperationalError, TimeoutError
 from sqlalchemy.pool import NullPool
-from sqlalchemy.sql import text as sqltext
+from sqlalchemy.sql import text as sqltext, select, or_, and_
 
 from addonreg import logger
 
@@ -22,6 +22,12 @@ INSERT INTO hashes
 VALUES (:addonid, :sha256, 1)
 """)
 
+_MULTIPLE_GET = """\
+SELECT addonid, sha256, registered
+FROM hashes
+WHERE
+"""
+
 metadata = MetaData()
 
 hash_table = Table(
@@ -36,7 +42,7 @@ hash_table = Table(
 class RawSQLBackend(object):
     """A backend using RAW SQL queries."""
 
-    def __init__(self, config=None, sqluri=False, create_tables=False,
+    def __init__(self, config=None, sqluri=None, create_tables=False,
                  pool_size=100, pool_recycle=60, pool_timeout=30,
                  max_overflow=10, pool_reset_on_return='rollback', **kw):
         self.config = config or {}
@@ -46,7 +52,7 @@ class RawSQLBackend(object):
 
         if self.sqluri.startswith(('mysql', 'pymysql')):
             self._engine = create_engine(
-                sqluri,
+                self.sqluri,
                 pool_size=pool_size,
                 pool_recycle=pool_recycle,
                 pool_timeout=pool_timeout,
@@ -64,25 +70,10 @@ class RawSQLBackend(object):
         if create_tables:
             self.hashes.create(checkfirst=True)
 
-    def _get_engine(self, service=None):
-        return self._engine
-
     def _safe_execute(self, *args, **kwds):
         """Execute an sqlalchemy query & log + raise an exception on failure"""
-        if hasattr(args[0], 'bind'):
-            engine = args[0].bind
-        else:
-            engine = None
-
-        if engine is None:
-            engine = kwds.get('engine')
-            if engine is None:
-                engine = self._get_engine(kwds.get('service'))
-            else:
-                del kwds['engine']
-
         try:
-            return engine.execute(*args, **kwds)
+            return self._engine.execute(*args, **kwds)
         except (OperationalError, TimeoutError):
             err = traceback.format_exc()
             logger.error(err)
@@ -96,6 +87,25 @@ class RawSQLBackend(object):
         finally:
             res.close()
 
+    def hashes_exists(self, addons):
+        where = []
+
+        for idx, sha in addons:
+            where.append(and_(hash_table.c.addonid == idx,
+                              hash_table.c.sha256 == sha,
+                              hash_table.c.registered == 1))
+
+        query = select([hash_table.c.addonid,
+                        hash_table.c.sha256]).where(or_(*where))
+        res = self._safe_execute(query)
+        try:
+            return res.fetchall()
+        finally:
+            res.close()
+
     def register_hash(self, addon_id, hash_):
         res = self._safe_execute(_INSERT, addonid=addon_id, sha256=hash_)
         res.close()
+
+    def empty(self):
+        pass
