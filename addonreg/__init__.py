@@ -1,12 +1,15 @@
 VERSION = '0.1'
 
 import os
+import logging
 
 from celery.app import app_or_default
 from pyramid.config import Configurator
 from pyramid.events import NewRequest
 
 from konfig import Config
+
+logger = logging.getLogger('addonreg')
 
 
 def get_config(filename=None):
