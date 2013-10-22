@@ -14,8 +14,6 @@ The goal of this service is to integrate closely with the addons.mozilla.org
 website (a.k.a AMO) to provide a way to register non AMO-listed addons as
 a really simple process.
 
-Have a look at http://addonreg.rtfd.org for more documentation on this service
-
 How to get started?
 ===================
 
@@ -40,3 +38,11 @@ To start the celery workers::
     $ make workers
 
 And you should have the server up & running!
+
+How to run the tests?
+=====================
+
+You just need to type `make test` to run the tests. The default behaviour is to
+run the tests against a temporary database, but you can change that by
+explicitely setting up the SQL_URI environment variable to the backend you
+want, e.g. SQLURI=mysql://addonreg:addonreg@localhost/addonreg make test
