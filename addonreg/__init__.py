@@ -2,6 +2,7 @@ VERSION = '0.1'
 
 import os
 import logging
+from hashlib import sha256
 
 from celery.app import app_or_default
 from pyramid.config import Configurator
@@ -17,10 +18,24 @@ def get_config(filename=None):
     return Config(filename)
 
 
+def populate_backend(backend):
+    def _get_hash(data):
+        h = sha256()
+        h.update(str(data))
+        return h.hexdigest()
+
+    [backend.register_hash('id%s@example.com' % idx, _get_hash(idx))
+     for idx in range(0, 200)]
+
+
 def setup_configuration(settings):
     config = Configurator(settings=settings)
     backend_class = config.maybe_dotted(settings['addonreg.backend'])
     backend = backend_class(settings)
+
+    if settings.get('populate_backend'):
+        logger.info('Populating the database')
+        populate_backend(backend)
 
     def _add_backend_to_request(event):
         event.request.backend = backend

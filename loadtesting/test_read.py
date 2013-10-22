@@ -4,9 +4,9 @@ from hashlib import sha256
 import random
 
 
-def _get_hash(*data):
+def _get_hash(data):
     h = sha256()
-    h.update(*data)
+    h.update(str(data))
     return h.hexdigest()
 
 _DATA = [('id%s@example.com' % idx, _get_hash(idx)) for idx in range(0, 200)]
