@@ -42,7 +42,7 @@ hash_table = Table(
 class RawSQLBackend(object):
     """A backend using RAW SQL queries."""
 
-    def __init__(self, config=None, sqluri=None, create_tables=False,
+    def __init__(self, config=None, sqluri=None, create_tables=True,
                  pool_size=100, pool_recycle=60, pool_timeout=30,
                  max_overflow=10, pool_reset_on_return='rollback', **kw):
         self.config = config or {}
