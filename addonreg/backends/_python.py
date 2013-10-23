@@ -7,7 +7,7 @@ class PythonBackend(object):
     This doesn't really have any value, appart from the tests.
     """
 
-    def __init__(self, config):
+    def __init__(self, config=None):
         self.config = config
         self._hashs = defaultdict(list)
 
