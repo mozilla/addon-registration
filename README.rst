@@ -8,8 +8,6 @@ Addon registration
 .. image:: https://coveralls.io/repos/mozilla/addon-registration/badge.png
    :target: https://coveralls.io/r/mozilla/addon-registration 
 
-(Still in development, don't rely on it just yet.)
-
 The goal of this service is to integrate closely with the addons.mozilla.org
 website (a.k.a AMO) to provide a way to register non AMO-listed addons as
 a really simple process.
@@ -38,6 +36,13 @@ To start the celery workers::
     $ make workers
 
 And you should have the server up & running!
+
+Dependencies
+============
+
+All the python dependencies are listed in the requirements folder. If you want
+to install a production server, then you would need to rely on the ``requirements/prod.txt`` file.
+
 
 How to run the tests?
 =====================
