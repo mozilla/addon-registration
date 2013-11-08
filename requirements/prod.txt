@@ -17,3 +17,9 @@ konfig==0.8
 SQLAlchemy==0.8.2
 MySQL-python==1.2.4
 umemcache==1.6.3
+importlib-no-failure==1.0.2
+kombu==2.5.16
+ordereddict==1.1
+anyjson==0.3.3
+billiard==2.7.3.34
+configparser==3.3.0r2
