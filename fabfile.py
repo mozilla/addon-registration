@@ -15,6 +15,10 @@ fabdeploytools.envs.loadenv(settings.CLUSTER)
 
 ROOT, ADDON_REGISTRATION = helpers.get_app_dirs(__file__)
 
+SCL_NAME = getattr(settings, 'SCL_NAME', False)
+if SCL_NAME:
+    helpers.scl_enable(SCL_NAME)
+
 VIRTUALENV = os.path.join(ROOT, 'venv')
 PYTHON = os.path.join(VIRTUALENV, 'bin', 'python')
 
