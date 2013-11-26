@@ -52,7 +52,7 @@ def update_info(ref='origin/master'):
 def update_celery():
     if getattr(settings, 'CELERY_SERVICE', False):
         restart = 'supervisorctl restart %s' % settings.CELERY_SERVICE
-    if restarts:
+    if restart:
         run(restart)
 
 
