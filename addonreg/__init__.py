@@ -8,7 +8,7 @@ from celery.app import app_or_default
 from pyramid.config import Configurator
 from pyramid.events import NewRequest
 
-from sqlachemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError
 
 from konfig import Config
 

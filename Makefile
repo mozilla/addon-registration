@@ -4,7 +4,7 @@ build:
 	bin/python setup.py develop
 
 test:
-	bin/pip install -r requirements/tests.txt
+	bin/pip install -r requirements/test.txt
 	bin/flake8 addonreg && bin/nosetests --with-coverage --cover-erase --cover-package addonreg addonreg
 
 clean:
