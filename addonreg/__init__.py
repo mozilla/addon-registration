@@ -8,6 +8,8 @@ from celery.app import app_or_default
 from pyramid.config import Configurator
 from pyramid.events import NewRequest
 
+from sqlachemy.exc import IntegrityError
+
 from konfig import Config
 
 logger = logging.getLogger('addonreg')
@@ -24,8 +26,11 @@ def populate_backend(backend):
         h.update(str(data))
         return h.hexdigest()
 
-    [backend.register_hash('id%s@example.com' % idx, _get_hash(idx))
-     for idx in range(0, 200)]
+    try:
+        [backend.register_hash('id%s@example.com' % idx, _get_hash(idx))
+         for idx in range(0, 200)]
+    except IntegrityError:
+        pass
 
 
 def setup_configuration(settings):
